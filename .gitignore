@@ -1,0 +1,28 @@
+# Node
+node_modules/
+dist/
+frontend/dist/
+.vite/
+*.tsbuildinfo
+*.tsbuildinfo*
+frontend/tsconfig.app.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+.m2/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.swp
+*.DS_Store
+
+# Logs
+*.log
