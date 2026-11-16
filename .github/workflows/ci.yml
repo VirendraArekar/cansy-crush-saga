@@ -1,0 +1,56 @@
+name: Sugar Cascade CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  frontend-test-and-build:
+    name: Frontend CI (Vitest & Build)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run Frontend Tests (20 Vitest Suites)
+        working-directory: frontend
+        run: npm run test
+
+      - name: Build Frontend Bundle
+        working-directory: frontend
+        run: npm run build
+
+  backend-test-and-build:
+    name: Backend CI (Maven & Java 21/25)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Run Backend Tests
+        working-directory: backend
+        run: mvn clean test
+
+      - name: Package Backend JAR
+        working-directory: backend
+        run: mvn package -DskipTests
