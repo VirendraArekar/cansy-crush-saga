@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sugar_cascade_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: sugarcascade
+      POSTGRES_USER: sugar_user
+      POSTGRES_PASSWORD: sugar_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./backend/src/main/resources/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sugar_user -d sugarcascade"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: sugar_cascade_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
+    container_name: sugar_cascade_backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sugarcascade
+      SPRING_DATASOURCE_USERNAME: sugar_user
+      SPRING_DATASOURCE_PASSWORD: sugar_password
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      APP_JWT_SECRET: sugar-cascade-super-secure-production-jwt-token-secret-key-candy-match3-quest-2026
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sugar_cascade_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  postgres_data:
+  redis_data:
