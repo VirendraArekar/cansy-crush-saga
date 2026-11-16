@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sugar-cascade-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:sugarcascadedb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+  sql:
+    init:
+      mode: always
+
+app:
+  jwt:
+    secret: "sugar-cascade-super-secure-production-jwt-token-secret-key-candy-match3-quest-2026"
+    expiration-ms: 86400000 # 24 hours
+  rewards:
+    daily-login-coins: 250
+    daily-login-lives: 2
+    life-regen-interval-minutes: 30
+    max-lives: 5
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
