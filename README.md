@@ -4,6 +4,26 @@ A production-quality Match-3 puzzle game with 100 levels, original confectionery
 
 ---
 
+## 📸 Game Screens & UI Showcase
+
+| Splash Screen | Home Screen | Level Map (100 Levels) |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/01_splash_screen.png" width="240" alt="Splash Screen" /> | <img src="docs/screenshots/02_home_screen.png" width="240" alt="Home Screen" /> | <img src="docs/screenshots/03_level_map_screen.png" width="240" alt="Level Map" /> |
+
+| Active Gameplay (Wafer Board) | Level Goals & Boosters | Sweet Tasks & Quests |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/04_gameplay_screen.png" width="240" alt="Gameplay Screen" /> | <img src="docs/screenshots/05_level_goal_modal.png" width="240" alt="Level Goal Modal" /> | <img src="docs/screenshots/06_sweet_tasks_modal.png" width="240" alt="Sweet Tasks Modal" /> |
+
+| Booster Shop | Global Leaderboards | Player Profile |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/07_booster_shop_modal.png" width="240" alt="Booster Shop" /> | <img src="docs/screenshots/08_leaderboard_modal.png" width="240" alt="Leaderboard Modal" /> | <img src="docs/screenshots/09_player_profile_modal.png" width="240" alt="Profile Modal" /> |
+
+| Audio & Game Settings | Player Authentication |
+| :---: | :---: |
+| <img src="docs/screenshots/10_settings_modal.png" width="240" alt="Settings Modal" /> | <img src="docs/screenshots/11_auth_screen.png" width="240" alt="Auth Screen" /> |
+
+---
+
 ## 1. System Architecture
 
 ### Frontend Architecture
@@ -155,13 +175,15 @@ docker compose up --build
 cd frontend
 npm run test
 ```
-Runs 20 automated tests covering:
-- Horizontal & vertical match-3, match-4, match-5 detection
-- T/L-shape Wrapped Candy generation
-- Adjacent swap validation and deadlock auto-shuffling
-- Gravity column-by-column falling and top spawning
+Runs 36 automated unit tests across 7 test suites covering:
+- Horizontal, vertical, and diagonal match-3, match-4, match-5 detection
+- 2x2 square matches and arbitrary connected component cluster grouping
+- T/L-shape and square Wrapped Candy generation
+- 8-directional adjacent swap validation and deadlock auto-shuffling
+- Gravity column-by-column falling and top spawner replenishment
 - Special candy combinations (Striped+Striped, Wrapped+Wrapped, ColorBomb+Striped, ColorBomb+ColorBomb)
-- Combo multipliers and 3-star scoring
+- Top-left toast notifications and auto-dismissal
+- Combo multipliers and 3-star scoring milestones
 
 ### Backend Tests (Maven)
 ```bash

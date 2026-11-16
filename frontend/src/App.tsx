@@ -35,6 +35,30 @@ export const App: React.FC = () => {
     startLevel(levelId, boosters);
   };
 
+  React.useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const screenParam = params.get('screen') as GameScreen | null;
+      const modalParam = params.get('modal');
+
+      if (screenParam) {
+        setScreen(screenParam);
+        if (screenParam === 'PLAYING') {
+          startLevel(1);
+        }
+      }
+      if (modalParam === 'GOAL') setSelectedMapLevel(1);
+      if (modalParam === 'SHOP') setIsShopOpen(true);
+      if (modalParam === 'PROFILE') setIsProfileOpen(true);
+      if (modalParam === 'SETTINGS') setIsSettingsOpen(true);
+      if (modalParam === 'LEADERBOARD') setIsLeaderboardOpen(true);
+      if (modalParam === 'TASKS') openTasksModal();
+      if (modalParam === 'AD') setAdRewardType('LIVES');
+    } catch {
+      // ignore
+    }
+  }, []);
+
   return (
     <div className="relative w-full h-[100dvh] bg-slate-950 text-white font-sans overflow-hidden flex items-center justify-center">
       {/* Desktop Ambient Background Wallpaper with Floating Confections */}
